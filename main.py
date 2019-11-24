@@ -80,17 +80,11 @@ if __name__ == '__main__':
         event, values = window.read()
         print(event, values)
 
-        # if event is OK, on the navigation we are at the second level
-        # if it is not OK, we are on the second level
-        # if event is not "Ok":
-        #     # This line remembers the old state.
-        #     option = event
         if event is None or event == 'Exit':
             break
         if event == 'Ok':
             action_handler[current_state](values)
             layout = layout_handler.Success()
-        # if event == "Split" or event == 'Merge' or event == 'Word2PDF' or event == 'PDF2Image':
         else:
             layout = layout_handler[event]
             current_state = event
