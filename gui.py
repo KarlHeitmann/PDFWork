@@ -48,12 +48,21 @@ def PDF2Image():
         [sg.Ok()]
     ]
 
+def Success():
+    return [
+        [sg.Text("Success")],
+        [sg.Text("What do you want to do?")],
+        [sg.Button('Merge'), sg.Button('Split'), sg.Button('Word2PDF'), sg.Button('PDF2Image')]
+    ]
+
+
 def LayoutHandler():
     return {
         'Split': Split(),
         'Merge': Merge(),
         'Word2PDF': Word2PDF(),
-        'PDF2Image': PDF2Image()
+        'PDF2Image': PDF2Image(),
+        'Success': Success()
     }
 
 

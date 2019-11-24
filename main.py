@@ -65,47 +65,35 @@ def splitPDF(data):
             pdf_writer.write(out)
             print('Created: {}'.format(output_filename))
 
+def actionHandler():
+    return {
+        'Split': splitPDF,
+        'Merge': mergePDF,
+        'Word2PDF': wordToPdf
+    }
 
 if __name__ == '__main__':
     window = gui.Main()
+    layout_handler = gui.LayoutHandler()
+    action_handler = actionHandler()
     while True:
         event, values = window.read()
         print(event, values)
 
         # if event is OK, on the navigation we are at the second level
         # if it is not OK, we are on the second level
-        if event is not "Ok":
-            option = event
+        # if event is not "Ok":
+        #     # This line remembers the old state.
+        #     option = event
         if event is None or event == 'Exit':
             break
-        if event == "Split" or event == 'Merge' or event == 'Word2PDF' or event == 'PDF2Image':
-            layout = gui.LayoutHandler()[event]
-        elif event == "Ok":
-            if option == "Split":
-                splitPDF(values)
-                layout = [
-                    [sg.Text("Success")],
-                    [sg.Text("What do you want to do?")],
-                    [sg.Button('Merge'),sg.Button('Split'), sg.Button('Word2PDF'), sg.Button('PDF2Image')]
-                ]
-
-            elif option == "Merge":
-                mergePDF(values)
-                layout = [
-                    [sg.Text("Success")],
-                    [sg.Text("What do you want to do?")],
-                    [sg.Button('Merge'),sg.Button('Split'), sg.Button('Word2PDF'), sg.Button('PDF2Image')]
-                ]
-
-            elif option == "Word2PDF":
-                wordToPdf(values)
-                layout = [
-                    [sg.Text("Success")],
-                    [sg.Text("What do you want to do?")],
-                    [sg.Button('Merge'),sg.Button('Split'), sg.Button('Word2PDF'), sg.Button('PDF2Image')]
-                ]
+        if event == 'Ok':
+            action_handler[current_state](values)
+            layout = layout_handler.Success()
+        # if event == "Split" or event == 'Merge' or event == 'Word2PDF' or event == 'PDF2Image':
         else:
-            print("Error")
+            layout = layout_handler[event]
+            current_state = event
 
         window.Close()
         window = sg.Window('PDF Work', layout)
